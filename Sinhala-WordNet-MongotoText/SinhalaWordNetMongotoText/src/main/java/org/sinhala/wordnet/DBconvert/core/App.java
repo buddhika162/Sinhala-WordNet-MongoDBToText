@@ -14,10 +14,13 @@ import net.sf.extjwnl.utilities.shakshara;
 import org.sinhala.wordnet.DBconvert.config.SpringMongoConfig;
 import org.sinhala.wordnet.DBcovert.model.User;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaAdjective;
+import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaDerivationType;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaGender;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaNoun;
+import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaOrigin;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaRoot;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaSynset;
+import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaUsage;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaVerb;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -44,6 +47,7 @@ public class App {
 		//mongoOperation.save(user);
 		
 		sh.initialize();
+		
 		sh.delete();
 		//sh.initialize();
 		sh.initialize();
@@ -52,6 +56,9 @@ public class App {
 		app.addVerbToText();
 		app.addRootToText();
 		app.addGenderToText();
+		app.addDerivationToText();
+		app.addUsageToText();
+		app.addOriginToText();
        // sh.delete();
         //sh.close();
         //sh.initialize();
@@ -183,6 +190,85 @@ public void addRootToText(){
          }
 	}
 	
+	public void addDerivationToText(){
+		List<MongoSinhalaDerivationType> hm = app.findAllLatestDerivation();
+		
+		 
+		for (int i=0;i<hm.size();i++) {
+			
+			//System.out.println(mEntry.getKey() + " : " + mEntry.getValue());
+			MongoSinhalaDerivationType s=  hm.get(i);
+			//System.out.println(s.toString());
+        	long offset = 0;
+        	 //System.out.println(s);
+        	 try {
+     			offset =sh.addDerivationSynsetSakshara(s);
+        		 //System.out.println(offset+"  id");
+     		} catch (FileNotFoundException e) {
+     			// TODO Auto-generated catch block
+     			System.out.println("exep");
+     			e.printStackTrace();
+     		} catch (JWNLException e) {
+     			// TODO Auto-generated catch block
+     			System.out.println("exep");
+     			e.printStackTrace();
+    		}
+             
+         }
+	}
+	public void addUsageToText(){
+		List<MongoSinhalaUsage> hm = app.findAllLatestUsage();
+		
+		 
+		for (int i=0;i<hm.size();i++) {
+			
+			//System.out.println(mEntry.getKey() + " : " + mEntry.getValue());
+			MongoSinhalaUsage s=  hm.get(i);
+			//System.out.println(s.toString());
+        	long offset = 0;
+        	 //System.out.println(s);
+        	 try {
+     			offset =sh.addUsageSynsetSakshara(s);
+        		 //System.out.println(offset+"  id");
+     		} catch (FileNotFoundException e) {
+     			// TODO Auto-generated catch block
+     			System.out.println("exep");
+     			e.printStackTrace();
+     		} catch (JWNLException e) {
+     			// TODO Auto-generated catch block
+     			System.out.println("exep");
+     			e.printStackTrace();
+    		}
+             
+         }
+	}
+	public void addOriginToText(){
+		List<MongoSinhalaOrigin> hm = app.findAllLatestOrigin();
+		
+		 
+		for (int i=0;i<hm.size();i++) {
+			
+			//System.out.println(mEntry.getKey() + " : " + mEntry.getValue());
+			MongoSinhalaOrigin s=  hm.get(i);
+			//System.out.println(s.toString());
+        	long offset = 0;
+        	 //System.out.println(s);
+        	 try {
+     			offset =sh.addOriginSynsetSakshara(s);
+        		 //System.out.println(offset+"  id");
+     		} catch (FileNotFoundException e) {
+     			// TODO Auto-generated catch block
+     			System.out.println("exep");
+     			e.printStackTrace();
+     		} catch (JWNLException e) {
+     			// TODO Auto-generated catch block
+     			System.out.println("exep");
+     			e.printStackTrace();
+    		}
+             
+         }
+	}
+	
 	public List<MongoSinhalaSynset> findAllLatestSynsets(POS pos){
 		@SuppressWarnings("resource")
 		ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringMongoConfig.class);
@@ -274,6 +360,92 @@ public void addRootToText(){
 		List<String> words = new ArrayList<String>();
 		
 		for (MongoSinhalaGender s : collection) {	
+			if(!words.contains(s.getWordsAsString())){
+				words.add(s.getWordsAsString());
+				distinctCollection.add(s);
+			}
+			else{
+				int position = words.indexOf(s.getWordsAsString());
+				words.remove(position);
+				distinctCollection.remove(position);
+				words.add(s.getWordsAsString());
+				distinctCollection.add(s);
+			}
+			
+			
+			}
+		return distinctCollection;
+		
+	}
+	
+	
+	public List<MongoSinhalaDerivationType> findAllLatestDerivation(){
+		@SuppressWarnings("resource")
+		ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringMongoConfig.class);
+		MongoOperations mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
+		
+		
+		List<MongoSinhalaDerivationType> collection = mongoOperation.findAll(MongoSinhalaDerivationType.class);
+		List<MongoSinhalaDerivationType> distinctCollection = new ArrayList<MongoSinhalaDerivationType>();
+		List<String> words = new ArrayList<String>();
+		
+		for (MongoSinhalaDerivationType s : collection) {	
+			if(!words.contains(s.getWordsAsString())){
+				words.add(s.getWordsAsString());
+				distinctCollection.add(s);
+			}
+			else{
+				int position = words.indexOf(s.getWordsAsString());
+				words.remove(position);
+				distinctCollection.remove(position);
+				words.add(s.getWordsAsString());
+				distinctCollection.add(s);
+			}
+			
+			
+			}
+		return distinctCollection;
+		
+	}
+	public List<MongoSinhalaUsage> findAllLatestUsage(){
+		@SuppressWarnings("resource")
+		ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringMongoConfig.class);
+		MongoOperations mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
+		
+		
+		List<MongoSinhalaUsage> collection = mongoOperation.findAll(MongoSinhalaUsage.class);
+		List<MongoSinhalaUsage> distinctCollection = new ArrayList<MongoSinhalaUsage>();
+		List<String> words = new ArrayList<String>();
+		
+		for (MongoSinhalaUsage s : collection) {	
+			if(!words.contains(s.getWordsAsString())){
+				words.add(s.getWordsAsString());
+				distinctCollection.add(s);
+			}
+			else{
+				int position = words.indexOf(s.getWordsAsString());
+				words.remove(position);
+				distinctCollection.remove(position);
+				words.add(s.getWordsAsString());
+				distinctCollection.add(s);
+			}
+			
+			
+			}
+		return distinctCollection;
+		
+	}
+	public List<MongoSinhalaOrigin> findAllLatestOrigin(){
+		@SuppressWarnings("resource")
+		ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringMongoConfig.class);
+		MongoOperations mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
+		
+		
+		List<MongoSinhalaOrigin> collection = mongoOperation.findAll(MongoSinhalaOrigin.class);
+		List<MongoSinhalaOrigin> distinctCollection = new ArrayList<MongoSinhalaOrigin>();
+		List<String> words = new ArrayList<String>();
+		
+		for (MongoSinhalaOrigin s : collection) {	
 			if(!words.contains(s.getWordsAsString())){
 				words.add(s.getWordsAsString());
 				distinctCollection.add(s);
