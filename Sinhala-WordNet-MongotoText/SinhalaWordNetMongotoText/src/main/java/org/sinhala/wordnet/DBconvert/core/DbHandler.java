@@ -64,14 +64,14 @@ public class DbHandler {
 		//app.addNounRelations(hm);
 	}
 	
-	public void addNounRelations(){
+	public void addRelations(){
 		DbHandler dbHandler = new DbHandler();
 		List<MongoSinhalaSynset> nounSynset  = dbHandler.findAllLatestSynsets(POS.NOUN);
 		List<MongoSinhalaSynset> verbSynset  = dbHandler.findAllLatestSynsets(POS.VERB);
 		List<MongoSinhalaSynset> adjSynset  = dbHandler.findAllLatestSynsets(POS.ADJECTIVE);
 		HashMap<String, Integer> rootOrder = dbHandler.findRootOrder();	
 		try {
-			sh.addNounRelations(nounSynset,verbSynset,adjSynset,rootOrder);
+			sh.addRelations(nounSynset,verbSynset,adjSynset,rootOrder);
 		} catch (JWNLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

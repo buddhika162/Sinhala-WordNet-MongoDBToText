@@ -50,7 +50,7 @@ public class App {
 		dbHandler.addSynsetToText(POS.ORIGIN);
 		dbHandler.addSynsetToText(POS.DERIVATIONLANG);
 		
-		dbHandler.addNounRelations();
+		dbHandler.addRelations();
 		
         sh.close();
         System.out.println("done");
