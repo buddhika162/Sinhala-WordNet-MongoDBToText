@@ -66,10 +66,12 @@ public class DbHandler {
 	
 	public void addNounRelations(){
 		DbHandler dbHandler = new DbHandler();
-		List<MongoSinhalaSynset> hm  = dbHandler.findAllLatestSynsets(POS.NOUN);
+		List<MongoSinhalaSynset> nounSynset  = dbHandler.findAllLatestSynsets(POS.NOUN);
+		List<MongoSinhalaSynset> verbSynset  = dbHandler.findAllLatestSynsets(POS.VERB);
+		List<MongoSinhalaSynset> adjSynset  = dbHandler.findAllLatestSynsets(POS.ADJECTIVE);
 		HashMap<String, Integer> rootOrder = dbHandler.findRootOrder();	
 		try {
-			sh.addNounRelations(hm,rootOrder);
+			sh.addNounRelations(nounSynset,verbSynset,adjSynset,rootOrder);
 		} catch (JWNLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

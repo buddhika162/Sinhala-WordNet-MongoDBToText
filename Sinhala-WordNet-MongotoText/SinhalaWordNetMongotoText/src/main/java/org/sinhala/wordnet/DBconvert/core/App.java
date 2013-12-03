@@ -33,7 +33,7 @@ import org.springframework.data.mongodb.core.query.Update;
 public class App {
 
 	static shakshara sh = new shakshara();
-	static App app = new App();
+	
 	public static void main(String[] args) {
 
 		sh.initialize();
@@ -50,7 +50,8 @@ public class App {
 		dbHandler.addSynsetToText(POS.ORIGIN);
 		dbHandler.addSynsetToText(POS.DERIVATIONLANG);
 		
-       // app.addNounRelations();
+		dbHandler.addNounRelations();
+		
         sh.close();
         System.out.println("done");
 	}
