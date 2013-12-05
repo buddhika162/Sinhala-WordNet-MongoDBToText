@@ -10,6 +10,7 @@ import net.sf.extjwnl.data.POS;
 import net.sf.extjwnl.utilities.shakshara;
 
 import org.sinhala.wordnet.DBconvert.config.SpringMongoConfig;
+import org.sinhala.wordnet.DBconvert.config.SpringMongoConfig1;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaAdjective;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaAdverb;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaDerivationType;
@@ -34,6 +35,8 @@ public class DbHandler {
 	public DbHandler(){
 		
 	}
+	
+	// Add synset to text
 	public void addSynsetToText(POS pos){
 		
 		DbHandler dbHandler = new DbHandler();
@@ -41,34 +44,25 @@ public class DbHandler {
 		
 		 
 		for (int i=0;i<hm.size();i++) {
-		
-			
-			//System.out.println(mEntry.getKey() + " : " + mEntry.getValue());
 			MongoSinhalaSynset s=  hm.get(i);
-        	long offset = 0;
-        	 //System.out.println(s);
         	 try {
-     			offset =sh.addSynsetToText(s,pos);
-        		 //System.out.println(offset+"  id");
+     			sh.addSynsetToText(s,pos);
      		} catch (FileNotFoundException e) {
      			// TODO Auto-generated catch block
-     			//System.out.println(s);
-     			//System.out.println("exep");
      			e.printStackTrace();
      		} catch (JWNLException e) {
      			// TODO Auto-generated catch block
-     			//System.out.println("exep");
-     			//e.printStackTrace();
+     			
     		}
         	 catch(Exception e){
-        		 System.out.println(s);
+        		
         	 }
              
          }
 		
-		//app.addNounRelations(hm);
 	}
 	
+	//Add relations
 	public void addRelations(){
 		DbHandler dbHandler = new DbHandler();
 		List<MongoSinhalaSynset> nounSynset  = dbHandler.findAllLatestSynsets(POS.NOUN);
@@ -86,6 +80,8 @@ public class DbHandler {
 		
 	}
 	
+	
+	// Finding all latest synset to convert to text
 	public List<MongoSinhalaSynset> findAllLatestSynsets(POS pos){
 		@SuppressWarnings("resource")
 		ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringMongoConfig.class);
@@ -109,8 +105,6 @@ public class DbHandler {
 				ids.add(s.getEWNId());
 				distinctCollection.add(s);
 			}
-			
-			
 			}
 		
 		}
@@ -129,7 +123,6 @@ public class DbHandler {
 					ids.add(s.getEWNId());
 					distinctCollection.add(s);
 				}
-				
 				
 				}
 			
@@ -151,7 +144,6 @@ public class DbHandler {
 					distinctCollection.add(s);
 				}
 				
-				
 				}
 			
 			
@@ -171,7 +163,6 @@ public class DbHandler {
 					ids.add(s.getEWNId());
 					distinctCollection.add(s);
 				}
-				
 				
 				}
 			
@@ -277,6 +268,8 @@ public class DbHandler {
 		
 	}
 	
+	
+	// Find root order to help add relation function
 public HashMap<String, Integer> findRootOrder(){
 		
 		@SuppressWarnings("resource")
@@ -305,7 +298,6 @@ public HashMap<String, Integer> findRootOrder(){
 		int i=0;
 		for(MongoSinhalaRoot s : distinctCollection){
 			hm.put(s.getId(), i);
-			//System.out.println("sid"+s.getId());
 			i++;
 		}
 		

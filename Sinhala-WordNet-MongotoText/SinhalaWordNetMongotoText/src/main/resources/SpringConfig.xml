@@ -9,8 +9,8 @@
           http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<mongo:mongo host="127.0.0.1" port="27017" />
-	<mongo:db-factory dbname="yourdb" />
+	<mongo:mongo host="192.248.15.236" port="27017" />
+	<mongo:db-factory dbname="WordNet" />
 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
