@@ -11,6 +11,7 @@ import net.sf.extjwnl.utilities.shakshara;
 
 import org.sinhala.wordnet.DBconvert.config.SpringMongoConfig;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaAdjective;
+import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaAdverb;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaDerivationType;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaGender;
 import org.sinhala.wordnet.wordnetDB.model.MongoSinhalaNoun;
@@ -51,13 +52,17 @@ public class DbHandler {
         		 //System.out.println(offset+"  id");
      		} catch (FileNotFoundException e) {
      			// TODO Auto-generated catch block
-     			System.out.println("exep");
+     			//System.out.println(s);
+     			//System.out.println("exep");
      			e.printStackTrace();
      		} catch (JWNLException e) {
      			// TODO Auto-generated catch block
-     			System.out.println("exep");
-     			e.printStackTrace();
+     			//System.out.println("exep");
+     			//e.printStackTrace();
     		}
+        	 catch(Exception e){
+        		 System.out.println(s);
+        	 }
              
          }
 		
@@ -69,9 +74,10 @@ public class DbHandler {
 		List<MongoSinhalaSynset> nounSynset  = dbHandler.findAllLatestSynsets(POS.NOUN);
 		List<MongoSinhalaSynset> verbSynset  = dbHandler.findAllLatestSynsets(POS.VERB);
 		List<MongoSinhalaSynset> adjSynset  = dbHandler.findAllLatestSynsets(POS.ADJECTIVE);
+		List<MongoSinhalaSynset> advSynset  = dbHandler.findAllLatestSynsets(POS.ADVERB);
 		HashMap<String, Integer> rootOrder = dbHandler.findRootOrder();	
 		try {
-			sh.addRelations(nounSynset,verbSynset,adjSynset,rootOrder);
+			sh.addRelations(nounSynset,verbSynset,adjSynset,advSynset,rootOrder);
 		} catch (JWNLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -131,6 +137,27 @@ public class DbHandler {
 		
 		else if(pos == POS.ADJECTIVE){
 			List<MongoSinhalaAdjective> acollection = mongoOperation.findAll(MongoSinhalaAdjective.class);
+			for (MongoSinhalaSynset s : acollection) {	
+				
+				if(!ids.contains(s.getEWNId())){
+					ids.add(s.getEWNId());
+					distinctCollection.add(s);
+				}
+				else{
+					int position = ids.indexOf(s.getEWNId());
+					ids.remove(position);
+					distinctCollection.remove(position);
+					ids.add(s.getEWNId());
+					distinctCollection.add(s);
+				}
+				
+				
+				}
+			
+			
+			}
+		else if(pos == POS.ADVERB){
+			List<MongoSinhalaAdverb> acollection = mongoOperation.findAll(MongoSinhalaAdverb.class);
 			for (MongoSinhalaSynset s : acollection) {	
 				
 				if(!ids.contains(s.getEWNId())){

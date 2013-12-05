@@ -44,6 +44,7 @@ public class App {
 		dbHandler.addSynsetToText(POS.NOUN);
 		dbHandler.addSynsetToText(POS.VERB);
 		dbHandler.addSynsetToText(POS.ADJECTIVE);
+		dbHandler.addSynsetToText(POS.ADVERB);
 		dbHandler.addSynsetToText(POS.ROOT);
 		dbHandler.addSynsetToText(POS.USAGE);
 		dbHandler.addSynsetToText(POS.GENDER);
