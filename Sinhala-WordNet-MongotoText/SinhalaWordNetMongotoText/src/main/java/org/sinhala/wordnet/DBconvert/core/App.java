@@ -54,6 +54,7 @@ public class App {
 		dbHandler.addRelations();
 		
         sh.close();
+		//completed the file creation 
         System.out.println("done");
 	}
 	
